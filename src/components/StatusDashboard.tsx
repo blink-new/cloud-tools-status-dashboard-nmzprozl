@@ -3,6 +3,7 @@ import { OverallStatus } from './OverallStatus';
 import { CategoryFilter } from './CategoryFilter';
 import { SearchFilter } from './SearchFilter';
 import { ServiceCard } from './ServiceCard';
+import RecentOutages from './RecentOutages';
 import { Service, ServiceCategory, StatusResponse } from '../types/status';
 import { statusService } from '../services/statusService';
 import { Skeleton } from './ui/skeleton';
@@ -152,6 +153,11 @@ export function StatusDashboard() {
           overallStatus={statusData.overallStatus}
           lastUpdated={statusData.lastUpdated}
         />
+
+        {/* Recent Outages */}
+        <div className="mb-6">
+          <RecentOutages />
+        </div>
 
         {/* Category Filter */}
         <div className="mb-6">
