@@ -24,13 +24,16 @@ export function StatusDashboard() {
     try {
       if (isRefresh) {
         setRefreshing(true);
+        // For refresh, get fresh data
+        const data = await statusService.refreshStatus();
+        setStatusData(data);
       } else {
         setLoading(true);
+        // For initial load, use cached data with background update for speed
+        const data = await statusService.getStatusWithBackgroundUpdate();
+        setStatusData(data);
       }
       setError(null);
-      
-      const data = await statusService.getStatus();
-      setStatusData(data);
     } catch (err) {
       setError('Failed to load status data. Please try again.');
       console.error('Error loading status:', err);
@@ -128,6 +131,9 @@ export function StatusDashboard() {
               <p className="text-muted-foreground mt-1">
                 Real-time monitoring of major cloud providers and development tools
               </p>
+              <div className="mt-2 text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded-md inline-block">
+                ✅ Now fetching live status data from official status pages
+              </div>
             </div>
             <div className="flex items-center gap-2">
               <div className="text-sm text-muted-foreground">
@@ -190,6 +196,13 @@ export function StatusDashboard() {
           {selectedCategory !== 'All' && ` in ${selectedCategory}`}
           {searchTerm && ` matching "${searchTerm}"`}
           {statusFilter !== 'all' && ` with ${statusFilter} status`}
+        </div>
+
+        {/* Data Source Disclaimer */}
+        <div className="mt-6 text-center text-xs text-muted-foreground border-t pt-4">
+          Status data is fetched directly from official service status pages. 
+          Click on any service card to visit their official status page for detailed information.
+          Data is cached for 5 minutes and refreshed automatically.
         </div>
       </main>
     </div>
